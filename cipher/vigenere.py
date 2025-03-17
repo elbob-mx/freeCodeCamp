@@ -1,43 +1,36 @@
-def vigenere_cipher(text, keyword, mode):
-    result = ""
-    keyword_length = len(keyword)
-    keyword = keyword.upper()
+text = 'mrttaqrhknsw ih puggrur'
+custom_key = 'happycoding'
+
+def vigenere(message, key, direction=1):
     key_index = 0
+    alphabet = 'abcdefghijklmnopqrstuvwxyz'
+    final_message = ''
 
-    for i, char in enumerate(text):
-        if char.isalpha():
-            ascii_offset = ord('A') if char.isupper() else ord('a')
-            keyword_shift = ord(keyword[key_index % keyword_length]) - ord('A')
+    for char in message.lower():
 
-            if mode == "decrypt":
-                keyword_shift = -keyword_shift  # Reverse the shift for decryption
+        # Append any non-letter character to the message
+        if not char.isalpha():
+            final_message += char
+        else:        
+            # Find the right key character to encode/decode
+            key_char = key[key_index % len(key)]
+            key_index += 1
 
-            char = chr((ord(char) - ascii_offset + keyword_shift) % 26 + ascii_offset)
-            key_index+=1
-        result += char
+            # Define the offset and the encrypted/decrypted letter
+            offset = alphabet.index(key_char)
+            index = alphabet.find(char)
+            new_index = (index + offset*direction) % len(alphabet)
+            final_message += alphabet[new_index]
+    
+    return final_message
 
-    return result
+def encrypt(message, key):
+    return vigenere(message, key)
+    
+def decrypt(message, key):
+    return vigenere(message, key, -1)
 
-# Get mode
-while True:
-    print('Do you want to (e)ncrypt or (d)ecrypt?')
-    response = input('> ').lower()
-    if response.startswith('e'):
-        action = 'encrypt'
-        break
-    elif response.startswith('d'):
-        action = 'decrypt'
-        break
-    print('Please enter the letter e or d.')
-
-print("Enter the message.")
-message = input('> ')
-
-print("Enter the keyword.")
-keyword = input('> ').upper()
-
-# Perform encryption/decryption
-result = vigenere_cipher(message, keyword, action)
-
-# Display the result
-print(f"Result: {result}")
+print(f'\nEncrypted text: {text}')
+print(f'Key: {custom_key}')
+decryption = decrypt(text, custom_key)
+print(f'\nDecrypted text: {decryption}\n')

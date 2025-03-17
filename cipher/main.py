@@ -1,30 +1,19 @@
 text = 'Hello Zaira'
-custom_key = 'python'
+shift = 3
 
-def vigenere(message, key, direction):
-    key_index = 0
+def caesar(message, offset):
     alphabet = 'abcdefghijklmnopqrstuvwxyz'
-    final_message = ''
+    encrypted_text = ''
 
     for char in message.lower():
-    
-        # Append space to the message
         if char == ' ':
-            final_message += char
-        else:        
-            # Find the right key character to encode/decode
-            key_char = key[key_index % len(key)]
-            key_index += 1
-
-            # Define the offset and the encrypted/decrypted letter
-            offset = alphabet.index(key_char)
+            encrypted_text += char
+        else:
             index = alphabet.find(char)
-            new_index = (index + offset*direction) % len(alphabet)
-            final_message += alphabet[new_index]
-    
-    return final_message
-    
-encryption = vigenere(text, custom_key, 1)
-print(encryption)
-decryption = vigenere(encryption, custom_key, -1)
-print(decryption)
+            new_index = (index + offset) % len(alphabet)
+            encrypted_text += alphabet[new_index]
+    print('plain text:', message)
+    print('encrypted text:', encrypted_text)
+#
+caesar(text, shift)
+caesar(text, 13)
